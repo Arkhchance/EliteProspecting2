@@ -168,9 +168,20 @@ class application():
         self.wr.wm_geometry('+' + str(x) + '+' + str(y))
 
     def saveSettings(self):
+        #bit of sanity check
+        if len(self.room.get()) > 20:
+            room = "default"
+        else:
+            room = self.room.get()
+        try:
+            int(self.port.get())
+            port = self.port.get()
+        except ValueError:
+            port = "44988"
+
         self.config.changeConf("server","ip",self.ipAddr.get())
-        self.config.changeConf("server","port",self.port.get())
-        self.config.changeConf("server","room",self.room.get())
+        self.config.changeConf("server","port",port)
+        self.config.changeConf("server","room",room)
         self.config.changeConf("ui","text_color",self.myColor.get())
         self.config.changeConf("ui","text_other_color",self.otherColor.get())
         self.config.changeConf("ui","font_size",self.font.get())
