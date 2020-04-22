@@ -20,7 +20,7 @@ Transparency only work on windows
 (sorry fellow linux users) ¯\\\_(ツ)\_/¯
 
 use server.py if you want to run your own server !
-remove conf.ini, to revert to default settings :) 
+remove conf.ini, to revert to default settings :)
 
 Installation
 --------
@@ -29,7 +29,7 @@ Download the `.zip` file [here](https://github.com/Arkhchance/EliteProspecting2/
 Extract the content, run (after elite!)
 
 if you're under linux, you need python3, then pip install pyzmq playsound
-and clone the repo
+and clone the repo, edit journal.py to match your journal's location, I'll automate it in a future release
 
 Created by [CMDR Arkhchance](https://inara.cz/cmdr/10980/)
 
