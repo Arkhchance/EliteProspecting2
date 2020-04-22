@@ -84,13 +84,13 @@ class application():
         self.line.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.ltdCB = tk.Checkbutton(self.w,text='track LDT greater that',variable=self.tLtd)
+        self.ltdCB = tk.Checkbutton(self.w,text='track LDT greater than',variable=self.tLtd)
         self.ltdCB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.ltdThreshold = tk.Entry(self.w)
         self.ltdThreshold.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.painiteCB = tk.Checkbutton(self.w,text='track painite greater that',variable=self.tPainite)
+        self.painiteCB = tk.Checkbutton(self.w,text='track painite greater than',variable=self.tPainite)
         self.painiteCB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.painiteThreshold = tk.Entry(self.w)
         self.painiteThreshold.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
