@@ -20,6 +20,7 @@ Transparency only work on windows
 (sorry fellow linux users) ¯\\\_(ツ)\_/¯
 
 use server.py if you want to run your own server !
+remove conf.ini, to revert to default settings :) 
 
 Installation
 --------
