@@ -12,6 +12,8 @@ then Launch EliteProspecting2
 
 If you want to see your friend's prospector, change the room from default to something else (you and our friends need to use the same). Then click save settings and go online
 
+Then prospect, prospect, prospect :)
+
 About messages colors :
 You can use a string specifying the proportion of red, green and blue in hexadecimal digits. For example, "#fff" is white, "#000000" is black, "#00ff00" is pure green, and "#00ffff" is pure cyan (green plus blue).
 You can also use any locally defined standard color name. The colors "white", "black", "red", "green", "blue", "cyan", "yellow", and "magenta" will always be available.
