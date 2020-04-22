@@ -1,0 +1,28 @@
+import zmq
+
+class comm():
+    def __init__(self,config):
+
+        self.ip = config.config['server']['ip']
+        self.port = int(config.config['server']['port'])
+
+        self.context = zmq.Context()
+        self.msgSender = self.context.socket(zmq.PUSH)
+        self.msgReceiver = self.context.socket(zmq.SUB)
+
+        print("connecting to ", self.ip)
+        self.msgSender.connect("tcp://{}:{}".format(self.ip,self.port))
+        self.msgReceiver.connect("tcp://{}:{}".format(self.ip,self.port+1))
+        self.msgReceiver.setsockopt_string(zmq.SUBSCRIBE, "")
+
+    def sendMsg(self,msg):
+        #assuming json msg
+        self.msgSender.send_json(msg)
+
+    def rcvMsg(self):
+        return self.msgReceiver.recv_json()
+
+    def stop(self):
+        self.msgReceiver.close()
+        self.msgSender.close()
+        self.context.term()
