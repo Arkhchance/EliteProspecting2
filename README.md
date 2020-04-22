@@ -19,6 +19,7 @@ You can also use any locally defined standard color name. The colors "white", "b
 Transparency only work on windows
 (sorry fellow linux users) ¯\\\_(ツ)\_/¯
 
+use server.py if you want to run your own server !
 
 Installation
 --------
