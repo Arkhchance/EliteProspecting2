@@ -7,8 +7,7 @@ It shows you (and your wing mates) the content of your prospector limpet only if
 
 Usage
 --------
-Launch Elite Dangerous First !
-then Launch EliteProspecting2
+Launch EliteProspecting2.exe
 
 If you want to see your friend's prospector, change the room from default to something else (you and our friends need to use the same). Then click save settings and go online
 
