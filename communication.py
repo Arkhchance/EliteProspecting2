@@ -25,7 +25,7 @@ class comm():
     def sendStats(self,event):
         data = {
             "stats" : 1,
-            "name" : self.name,
+            "id" : self.name,
             "data" : event
         }
         self.msgSender.send_json(data)

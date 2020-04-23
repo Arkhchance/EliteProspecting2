@@ -34,10 +34,15 @@ def main():
 
 def writeStats(data,filehandler):
     print("receive stat event")
-    towrite = {
-        "user" : data['name'],
-        "data" : data['data']
-    }
+    try:
+        towrite = {
+            "id" : data['id'],
+            "data" : data['data']
+        }
+    except KeyError:
+        print("received crap")
+        return
+
     filehandler.write(json.dumps(towrite)+"\n")
 
 if __name__ == "__main__":

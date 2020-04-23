@@ -24,7 +24,7 @@ class application():
         self.run = True
         self.connected = False
         self.soundplayer = sound()
-
+        self.entryStatList = ["ProspectedAsteroid","StartJump","SupercruiseExit"]
         try:
             self.journal = journal()
         except ValueError as e :
@@ -269,18 +269,20 @@ class application():
         for entry in self.journal.events():
             if not self.run:
                 return
+            self.stats(entry)
             if entry['event'] == "ProspectedAsteroid":
                 #we have a winner
                 self.processMat(entry)
 
+    #send statistc
+    def stats(self,entry):
+        if entry['event'] in self.entryStatList:
+            if self.connected and self.config.config['server']['collect'] == "1":
+                self.comm.sendStats(entry)
 
     def processMat(self,entry):
         empty = True
         belowT = False
-
-        #send statistc
-        if self.connected and self.config.config['server']['collect'] == "1":
-            self.comm.sendStats(entry)
 
         #hash material to easly find duplicate between wings mate
         matHash = hashlib.md5(json.dumps(entry["Materials"]).encode()).hexdigest()

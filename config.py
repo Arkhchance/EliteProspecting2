@@ -53,4 +53,4 @@ class config():
         newConf.set("ui","transparency","0")
 
         newConf.write(inifile)
-        newConf.close()
+        inifile.close()
