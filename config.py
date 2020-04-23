@@ -52,6 +52,7 @@ class config():
         newConf.set("ui","total_message","6")
         newConf.set("ui","transparency","0")
         newConf.set("ui","online","0")
+        newConf.set("ui","show_overlay","1")
 
         newConf.write(inifile)
         inifile.close()

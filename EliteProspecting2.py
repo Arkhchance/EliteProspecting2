@@ -44,6 +44,7 @@ class application():
         self.trans = tk.IntVar(value=self.config.config['ui']['transparency'])
         self.collect = tk.IntVar(value=self.config.config['server']['collect'])
         self.onlineD = tk.IntVar(value=self.config.config['ui']['online'])
+        self.overlay = tk.IntVar(value=self.config.config['ui']['show_overlay'])
 
         self.ipLabel = tk.Label(self.w,text="Server IP")
         self.ipAddr = tk.Entry(self.w)
@@ -103,6 +104,10 @@ class application():
         self.soundCB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
+        self.overlayB = tk.Checkbutton(self.w,text='Show overlay',variable=self.overlay)
+        self.overlayB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+
+        row += 1
         self.transB = tk.Checkbutton(self.w,text='Make overlay transparent',variable=self.trans)
         self.transB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
 
@@ -144,6 +149,9 @@ class application():
             self.wr.destroy()
         except AttributeError as e:
             print("window was not created yet")
+
+        if self.config.config['ui']['show_overlay'] != "1":
+            return;
 
         self.wr = tk.Toplevel()
         self.wr.wm_attributes("-topmost", True)
@@ -206,6 +214,7 @@ class application():
         self.config.changeConf("ui","total_message",self.line.get())
         self.config.changeConf("ui","transparency",self.trans.get())
         self.config.changeConf("ui","online",self.onlineD.get())
+        self.config.changeConf("ui","show_overlay",self.overlay.get())
         self.config.changeConf("mining","ltd_t",self.ltdThreshold.get())
         self.config.changeConf("mining","painite_t",self.painiteThreshold.get())
         self.config.changeConf("mining","track_ltd",self.tLtd.get())
@@ -262,6 +271,8 @@ class application():
                 self.status[i]['text'] = self.messages[i]
 
     def displayMsg(self, msg, mine=True):
+        if self.config.config['ui']['show_overlay'] != "1":
+            return;
         if mine:
             color = "mine"
         else:
