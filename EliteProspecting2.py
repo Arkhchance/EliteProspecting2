@@ -128,6 +128,9 @@ class application():
         self.networkThread = threading.Thread(target=self.receiveMsg)
         self.networkThread.start()
 
+        #go online asap
+        self.connect()
+
     def setupUi(self):
         try:
             self.wr.destroy()
