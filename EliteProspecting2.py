@@ -357,6 +357,8 @@ class application():
     def closing(self):
         self.run = False
         self.journal.stop = True
+        if self.connected:
+            self.connect()
         self.w.destroy()
         time.sleep(1)
         quit()
