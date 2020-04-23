@@ -32,6 +32,7 @@ class config():
         newConf.set("server","ip","51.254.124.98")
         newConf.set("server","port","44988")
         newConf.set("server","room","default")
+        newConf.set("server","collect","1")
 
         #mining serction
         newConf.add_section("mining")

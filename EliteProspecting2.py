@@ -41,6 +41,7 @@ class application():
         self.tPainite = tk.IntVar(value=self.config.config['mining']['track_painite'])
         self.sound = tk.IntVar(value=self.config.config['ui']['sound'])
         self.trans = tk.IntVar(value=self.config.config['ui']['transparency'])
+        self.collect = tk.IntVar(value=self.config.config['server']['collect'])
 
         self.ipLabel = tk.Label(self.w,text="Server IP")
         self.ipAddr = tk.Entry(self.w)
@@ -102,6 +103,10 @@ class application():
         row += 1
         self.transB = tk.Checkbutton(self.w,text='Make overlay transparent',variable=self.trans)
         self.transB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+
+        row += 1
+        self.collectB = tk.Checkbutton(self.w,text='Allow server to store prospecting event for statistical purpose (anonymous)',variable=self.collect)
+        self.collectB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
         self.settings = tk.Button(self.w, text="save settings", command=self.saveSettings)
@@ -182,6 +187,7 @@ class application():
         self.config.changeConf("server","ip",self.ipAddr.get())
         self.config.changeConf("server","port",port)
         self.config.changeConf("server","room",room)
+        self.config.changeConf("server","collect",self.collect.get())
         self.config.changeConf("ui","text_color",self.myColor.get())
         self.config.changeConf("ui","text_other_color",self.otherColor.get())
         self.config.changeConf("ui","font_size",self.font.get())
@@ -271,6 +277,10 @@ class application():
     def processMat(self,entry):
         empty = True
         belowT = False
+
+        #send statistc
+        if self.connected and self.config.config['server']['collect'] == "1":
+            self.comm.sendStats(entry)
 
         #hash material to easly find duplicate between wings mate
         matHash = hashlib.md5(json.dumps(entry["Materials"]).encode()).hexdigest()
