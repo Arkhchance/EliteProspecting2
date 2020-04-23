@@ -198,7 +198,6 @@ class application():
         self.setupUi()
 
     def updateWin(self,val):
-        print(val)
         self.posX = self.winX.get()
         self.posY = self.winY.get()
         self.wr.wm_geometry('+' + str(self.posX) + '+' + str(self.posY))
@@ -265,7 +264,7 @@ class application():
             if not self.run:
                 return
             if entry['event'] == "ProspectedAsteroid":
-                #we have winneer
+                #we have a winner
                 self.processMat(entry)
 
 
@@ -277,12 +276,10 @@ class application():
         matHash = hashlib.md5(json.dumps(entry["Materials"]).encode()).hexdigest()
 
         if matHash in self.hashlist:
-            print("duplicate")
             self.displayMsg("Asteroid already prospected")
             return
         else:
             self.hashlist.append(matHash)
-        print("check mats")
         #check for materials
         for mat in entry['Materials']:
             if mat['Name'] == "LowTemperatureDiamond" and self.config.config['mining']['track_ltd'] == "1" :
@@ -350,7 +347,6 @@ class application():
         self.displayMsg(message,False)
 
     def playsound(self):
-        print("play sound")
         if self.config.config['ui']['sound'] == "1":
             self.soundplayer.play()
 
@@ -361,7 +357,7 @@ class application():
             self.connect()
         self.w.destroy()
         time.sleep(1)
-        quit()
+        print("bye")
 
 def main():
     myconf = config()
