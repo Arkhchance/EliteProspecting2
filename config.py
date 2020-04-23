@@ -4,7 +4,7 @@ import os.path
 class config():
     def __init__(self):
         self.config = configparser.ConfigParser()
-        self.configFile = "conf.ini"
+        self.configFile = "EliteProspecting2.ini"
         if not os.path.exists(self.configFile):
             self.createConfig()
 
@@ -51,6 +51,7 @@ class config():
         newConf.set("ui","pos_y","10")
         newConf.set("ui","total_message","6")
         newConf.set("ui","transparency","0")
+        newConf.set("ui","online","0")
 
         newConf.write(inifile)
         inifile.close()

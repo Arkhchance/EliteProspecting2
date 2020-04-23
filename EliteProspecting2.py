@@ -36,12 +36,14 @@ class application():
         self.w = master
         self.w.title("EliteProspecting")
         self.w.protocol("WM_DELETE_WINDOW", self.closing)
+        self.w.bind("<Return>",self.saveSettings)
         self.w.resizable(False,False)
         self.tLtd = tk.IntVar(value=self.config.config['mining']['track_ltd'])
         self.tPainite = tk.IntVar(value=self.config.config['mining']['track_painite'])
         self.sound = tk.IntVar(value=self.config.config['ui']['sound'])
         self.trans = tk.IntVar(value=self.config.config['ui']['transparency'])
         self.collect = tk.IntVar(value=self.config.config['server']['collect'])
+        self.onlineD = tk.IntVar(value=self.config.config['ui']['online'])
 
         self.ipLabel = tk.Label(self.w,text="Server IP")
         self.ipAddr = tk.Entry(self.w)
@@ -109,6 +111,10 @@ class application():
         self.collectB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
+        self.onlineDB = tk.Checkbutton(self.w,text='Start EliteProspecting online',variable=self.onlineD)
+        self.onlineDB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+
+        row += 1
         self.settings = tk.Button(self.w, text="save settings", command=self.saveSettings)
         self.settings.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
 
@@ -117,6 +123,7 @@ class application():
         self.onlineLabel = tk.Label(self.w,text="Offline")
         self.onlineB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.onlineLabel.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
+        self.onlineLabel.config(foreground="Red")
 
         self.loadConf()
         self.loadSetup()
@@ -128,8 +135,9 @@ class application():
         self.networkThread = threading.Thread(target=self.receiveMsg)
         self.networkThread.start()
 
-        #go online asap
-        self.connect()
+        #go online at startup  ?
+        if self.config.config['ui']['online'] == "1":
+            self.connect()
 
     def setupUi(self):
         try:
@@ -175,7 +183,7 @@ class application():
         y = self.wr.winfo_y() + deltay
         self.wr.wm_geometry('+' + str(x) + '+' + str(y))
 
-    def saveSettings(self):
+    def saveSettings(self,event=None):
         #bit of sanity check
         if len(self.room.get()) > 20:
             room = "default"
@@ -197,6 +205,7 @@ class application():
         self.config.changeConf("ui","sound",self.sound.get())
         self.config.changeConf("ui","total_message",self.line.get())
         self.config.changeConf("ui","transparency",self.trans.get())
+        self.config.changeConf("ui","online",self.onlineD.get())
         self.config.changeConf("mining","ltd_t",self.ltdThreshold.get())
         self.config.changeConf("mining","painite_t",self.painiteThreshold.get())
         self.config.changeConf("mining","track_ltd",self.tLtd.get())
@@ -217,12 +226,14 @@ class application():
             self.connected = True
             self.onlineB['text'] = "Go offline"
             self.onlineLabel['text'] = "Online"
+            self.onlineLabel.config(foreground="Green")
         else:
             self.connected = False
             time.sleep(0.2)
             self.comm.stop()
             self.onlineB['text'] = "Go online"
             self.onlineLabel['text'] = "Offline"
+            self.onlineLabel.config(foreground="Red")
 
     def loadSetup(self):
         #setup variable
