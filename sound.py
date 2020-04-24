@@ -1,22 +1,22 @@
-#!/usr/bin/python
 import os
 import threading
-try:
-    from playsound import playsound
-    audio = True
-except ImportError:
-    audio = False
-
+import glob
+from playsound import playsound
 
 class sound():
     def __init__(self):
-        self.audio_available = audio
         self.sound_file = os.path.dirname(os.path.realpath(__file__))
-        self.sound_file += "/sound/ding.wav"
+        self.sound_file += "/EliteProspecting2sound/*"
+        fileList = glob.glob(self.sound_file)
+        self.sound_file = fileList[0]
+        print(fileList)
 
     def play(self):
-        if self.audio_available:
-            threading.Thread(target=self.playSound).start()
+        threading.Thread(target=self.playSound).start()
 
     def playSound(self):
-        playsound(self.sound_file)
+        try:
+            print("playing ",self.sound_file)
+            playsound(self.sound_file)
+        except Exception as e :
+            print("there was an error playing sound file ", e, self.sound_file)
