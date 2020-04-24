@@ -55,5 +55,13 @@ class config():
         newConf.set("ui","online","0")
         newConf.set("ui","show_overlay","1")
 
+        #ui colors
+        newConf.add_section("ui_colors")
+        newConf.set("ui_colors","backgroundColor","#2C3037")
+        newConf.set("ui_colors","textColor","#47ACE1")
+        newConf.set("ui_colors","boxColor","#40444B")
+        newConf.set("ui_colors","boxTextColor","White")
+        newConf.set("ui_colors","cbValid","Green")
+
         newConf.write(inifile)
         inifile.close()

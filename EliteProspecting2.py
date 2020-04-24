@@ -25,6 +25,7 @@ class application():
         self.run = True
         self.connected = False
         self.soundplayer = sound()
+        self.checkBoxes = []
         self.entryStatList = ["ProspectedAsteroid","StartJump","SupercruiseExit"]
         try:
             self.journal = journal()
@@ -34,11 +35,17 @@ class application():
 
 
         #setup ui
+        backgroundColor = self.config.config['ui_colors']['backgroundColor']
+        textColor = self.config.config['ui_colors']['textColor']
+        boxColor = self.config.config['ui_colors']['boxColor']
+        boxTextColor = self.config.config['ui_colors']['boxTextColor']
+
         self.w = master
         self.w.title("EliteProspecting")
         self.w.protocol("WM_DELETE_WINDOW", self.closing)
         self.w.bind("<Return>",self.saveSettings)
         self.w.resizable(False,False)
+        self.w.configure(background=backgroundColor)
         self.tLtd = tk.IntVar(value=self.config.config['mining']['track_ltd'])
         self.tPainite = tk.IntVar(value=self.config.config['mining']['track_painite'])
         self.sound = tk.IntVar(value=self.config.config['ui']['sound'])
@@ -48,90 +55,98 @@ class application():
         self.overlay = tk.IntVar(value=self.config.config['ui']['show_overlay'])
         self.cargo = tk.IntVar(value=self.config.config['mining']['track_cargo'])
 
-        self.ipLabel = tk.Label(self.w,text="Server IP")
-        self.ipAddr = tk.Entry(self.w)
+        self.ipLabel = tk.Label(self.w,text="Server IP",background=backgroundColor,foreground=textColor)
+        self.ipAddr = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.ipLabel.grid(row=row,padx=PADX,sticky=tk.W)
         self.ipAddr.grid(row=row,column=1,padx=PADX,pady=PADY,sticky=tk.EW)
 
         row += 1
-        self.portLabel = tk.Label(self.w, text="Server Port")
-        self.port  = tk.Entry(self.w)
+        self.portLabel = tk.Label(self.w, text="Server Port",background=backgroundColor,foreground=textColor)
+        self.port  = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.portLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.port.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.roomLabel = tk.Label(self.w,text="Server Room")
-        self.room = tk.Entry(self.w)
+        self.roomLabel = tk.Label(self.w,text="Server Room",background=backgroundColor,foreground=textColor)
+        self.room = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.roomLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.room.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.myColorLabel = tk.Label(self.w,text="My Color")
-        self.myColor = tk.Entry(self.w)
+        self.myColorLabel = tk.Label(self.w,text="My Color",background=backgroundColor,foreground=textColor)
+        self.myColor = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.myColorLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.myColor.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.otherColorLabel = tk.Label(self.w,text="Other's Color")
-        self.otherColor = tk.Entry(self.w)
+        self.otherColorLabel = tk.Label(self.w,text="Other's Color",background=backgroundColor,foreground=textColor)
+        self.otherColor = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.otherColorLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.otherColor.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.fontLabel = tk.Label(self.w,text="Font size")
-        self.font = tk.Entry(self.w)
+        self.fontLabel = tk.Label(self.w,text="Font size",background=backgroundColor,foreground=textColor)
+        self.font = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.fontLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.font.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.lineLabel = tk.Label(self.w,text="Lines number")
-        self.line = tk.Entry(self.w)
+        self.lineLabel = tk.Label(self.w,text="Lines number",background=backgroundColor,foreground=textColor)
+        self.line = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.lineLabel.grid(row=row, padx=PADX, sticky=tk.W)
         self.line.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
 
         row += 1
-        self.ltdCB = tk.Checkbutton(self.w,text='track LDT greater than',variable=self.tLtd)
+        self.ltdCB = tk.Checkbutton(self.w,text='Track LDT greater than',variable=self.tLtd,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.ltdCB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
-        self.ltdThreshold = tk.Entry(self.w)
+        self.ltdThreshold = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.ltdThreshold.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
+        self.checkBoxes.append((self.ltdCB,self.tLtd))
 
         row += 1
-        self.painiteCB = tk.Checkbutton(self.w,text='track painite greater than',variable=self.tPainite)
+        self.painiteCB = tk.Checkbutton(self.w,text='Track painite greater than',variable=self.tPainite,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.painiteCB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
-        self.painiteThreshold = tk.Entry(self.w)
+        self.painiteThreshold = tk.Entry(self.w,background=boxColor,foreground=boxTextColor)
         self.painiteThreshold.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
+        self.checkBoxes.append((self.painiteCB,self.tPainite))
 
         row += 1
-        self.cargoB = tk.Checkbutton(self.w,text='Track my cargo',variable=self.cargo)
+        self.cargoB = tk.Checkbutton(self.w,text='Track my cargo',variable=self.cargo,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.cargoB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.cargoB,self.cargo))
 
         row += 1
-        self.soundCB = tk.Checkbutton(self.w,text='Play a sound when threshold is met',variable=self.sound)
+        self.soundCB = tk.Checkbutton(self.w,text='Play a sound when threshold is met',variable=self.sound,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.soundCB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.soundCB,self.sound))
 
         row += 1
-        self.overlayB = tk.Checkbutton(self.w,text='Show overlay',variable=self.overlay)
+        self.overlayB = tk.Checkbutton(self.w,text='Show overlay',variable=self.overlay,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.overlayB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.overlayB,self.overlay))
 
         row += 1
-        self.transB = tk.Checkbutton(self.w,text='Make overlay transparent',variable=self.trans)
+        self.transB = tk.Checkbutton(self.w,text='Make overlay transparent',variable=self.trans,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.transB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.transB,self.trans))
 
         row += 1
-        self.collectB = tk.Checkbutton(self.w,text='Allow server to store prospecting event for statistical purpose (anonymous)',variable=self.collect)
+        self.collectB = tk.Checkbutton(self.w,text='Allow server to store prospecting event for statistical purpose (anonymous)',variable=self.collect,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.collectB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.collectB,self.collect))
 
         row += 1
-        self.onlineDB = tk.Checkbutton(self.w,text='Start EliteProspecting online',variable=self.onlineD)
+        self.onlineDB = tk.Checkbutton(self.w,text='Start EliteProspecting online',variable=self.onlineD,background=backgroundColor,foreground=textColor,command=self.onCheck)
         self.onlineDB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
+        self.checkBoxes.append((self.onlineDB,self.onlineD))
 
         row += 1
-        self.settings = tk.Button(self.w, text="save settings", command=self.saveSettings)
+        self.settings = tk.Button(self.w, text="Save settings", command=self.saveSettings,background=backgroundColor,foreground=textColor)
         self.settings.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
-        self.onlineB = tk.Button(self.w, text="Go Online", command=self.connect)
-        self.onlineLabel = tk.Label(self.w,text="Offline")
+        self.onlineB = tk.Button(self.w, text="Go Snline", command=self.connect,background=backgroundColor,foreground=textColor)
+        self.onlineLabel = tk.Label(self.w,text="Offline",background=backgroundColor)
         self.onlineB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.onlineLabel.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
         self.onlineLabel.config(foreground="Red")
@@ -139,6 +154,7 @@ class application():
         self.loadConf()
         self.loadSetup()
         self.setupUi()
+        self.onCheck()
 
         self.processThread = threading.Thread(target=self.processEvents)
         self.processThread.start()
@@ -149,6 +165,15 @@ class application():
         #go online at startup  ?
         if self.config.config['ui']['online'] == "1":
             self.connect()
+
+    def onCheck(self,event=None):
+        for (checkBox,value) in self.checkBoxes:
+            if value.get() == 1:
+                print("1")
+                checkBox["foreground"] = self.config.config['ui_colors']['cbValid']
+            else:
+                print("0")
+                checkBox["foreground"] = self.config.config['ui_colors']['textColor']
 
     def setupUi(self):
         try:
