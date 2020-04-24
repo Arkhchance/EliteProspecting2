@@ -7,8 +7,6 @@ import threading
 def main():
 
     context = zmq.Context()
-    statfile = open("event_stats.log","a+")
-    # Socket to send messages on
     sender = context.socket(zmq.PUB)
     sender.bind("tcp://*:44989")
     receiver = context.socket(zmq.PULL)
@@ -19,7 +17,7 @@ def main():
         try:
             msg = receiver.recv_json()
             if "stats" in msg.keys():
-                writeStats(msg,statfile)
+                threading.Thread(target=writeStats,args=(msg,)).start()
                 continue #do not broadcast stats
             print("msg received ... ")
             sender.send_json(msg)
@@ -29,10 +27,9 @@ def main():
             sender.close()
             receiver.close()
             context.term()
-            statfile.close()
             quit()
 
-def writeStats(data,filehandler):
+def writeStats(data):
     print("receive stat event")
     try:
         towrite = {
@@ -43,7 +40,8 @@ def writeStats(data,filehandler):
         print("received crap")
         return
 
-    filehandler.write(json.dumps(towrite)+"\n")
+    with open("event_stats.log","a+") as fh:
+        fh.write(json.dumps(towrite)+"\n")
 
 if __name__ == "__main__":
     # execute only if run as a script
