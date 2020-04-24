@@ -61,7 +61,7 @@ class config():
         newConf.set("ui_colors","textColor","#47ACE1")
         newConf.set("ui_colors","boxColor","#40444B")
         newConf.set("ui_colors","boxTextColor","White")
-        newConf.set("ui_colors","cbValid","Green")
+        newConf.set("ui_colors","cbValid","#47ACE1")
 
         newConf.write(inifile)
         inifile.close()
