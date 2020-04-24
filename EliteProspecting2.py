@@ -13,12 +13,13 @@ class application():
     def __init__(self,master,config):
         #display options
         row = 2
-        PADX = 10
+        PADX = 8
         PADY = 3
 
         self.totalMsg = 0
         self.messages = []
         self.hashlist = []
+        self.cargoCount = "0"
         self.colors = []
         self.config = config
         self.run = True
@@ -45,6 +46,7 @@ class application():
         self.collect = tk.IntVar(value=self.config.config['server']['collect'])
         self.onlineD = tk.IntVar(value=self.config.config['ui']['online'])
         self.overlay = tk.IntVar(value=self.config.config['ui']['show_overlay'])
+        self.cargo = tk.IntVar(value=self.config.config['mining']['track_cargo'])
 
         self.ipLabel = tk.Label(self.w,text="Server IP")
         self.ipAddr = tk.Entry(self.w)
@@ -98,6 +100,10 @@ class application():
         self.painiteCB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.painiteThreshold = tk.Entry(self.w)
         self.painiteThreshold.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
+
+        row += 1
+        self.cargoB = tk.Checkbutton(self.w,text='Track my cargo',variable=self.cargo)
+        self.cargoB.grid(row=row, column=0, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
         self.soundCB = tk.Checkbutton(self.w,text='Play a sound when threshold is met',variable=self.sound)
@@ -165,12 +171,17 @@ class application():
         if self.config.config['ui']['transparency'] == "1":
             self.wr.attributes("-transparentcolor", 'black')
 
+        if self.config.config['mining']['track_cargo'] == "1":
+            self.cargoStatus = tk.Label(self.wr, text="", foreground="yellow")
+            self.cargoStatus.config(font=("Courier", int(self.font.get())),background='black')
+            self.cargoStatus.pack(side="top", fill="both", expand=True, padx=10, pady=10)
+
         for i in range(self.totalMsgDisplay):
             self.status[i] = tk.Label(self.wr, text="", foreground="yellow")
             self.status[i].config(font=("Courier", int(self.font.get())),background='black')
             self.status[i].pack(side="top", fill="both", expand=True, padx=10, pady=10)
             if i == 0:
-                self.status[i]['text'] = "Waiting..."
+                self.status[i]['text'] = "Waiting for prospector..."
         self.refreshDisplay()
 
     def startMove(self,event):
@@ -219,6 +230,7 @@ class application():
         self.config.changeConf("mining","painite_t",self.painiteThreshold.get())
         self.config.changeConf("mining","track_ltd",self.tLtd.get())
         self.config.changeConf("mining","track_painite",self.tPainite.get())
+        self.config.changeConf("mining","track_cargo",self.cargo.get())
 
         self.config.configSave()
         self.loadSetup()
@@ -262,13 +274,16 @@ class application():
         self.line.insert(0,self.config.config['ui']['total_message'])
 
     def refreshDisplay(self):
-            for i in range(len(self.messages)):
-                if self.colors[i] == "mine":
-                    color = self.config.config['ui']['text_color']
-                else:
-                    color = self.config.config['ui']['text_other_color']
-                self.status[i].config(foreground=color)
-                self.status[i]['text'] = self.messages[i]
+        if self.config.config['mining']['track_cargo'] == "1":
+            self.cargoStatus['text'] = "Cargo : " + self.cargoCount
+
+        for i in range(len(self.messages)):
+            if self.colors[i] == "mine":
+                color = self.config.config['ui']['text_color']
+            else:
+                color = self.config.config['ui']['text_other_color']
+            self.status[i].config(foreground=color)
+            self.status[i]['text'] = self.messages[i]
 
     def displayMsg(self, msg, mine=True):
         if self.config.config['ui']['show_overlay'] != "1":
@@ -298,6 +313,9 @@ class application():
             if entry['event'] == "ProspectedAsteroid":
                 #we have a winner
                 self.processMat(entry)
+
+            elif entry['event'] == "Cargo":
+                self.updateCargo(entry)
 
     #send statistc
     def stats(self,entry):
@@ -382,6 +400,10 @@ class application():
 
         message += " " + msg['data']
         self.displayMsg(message,False)
+
+    def updateCargo(self,event):
+        self.cargoCount = str(event['Count'])
+        self.refreshDisplay()
 
     def playsound(self):
         if self.config.config['ui']['sound'] == "1":

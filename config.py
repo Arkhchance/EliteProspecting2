@@ -40,11 +40,12 @@ class config():
         newConf.set("mining","track_painite","1")
         newConf.set("mining","ltd_t","18")
         newConf.set("mining","painite_t","25")
+        newConf.set("mining","track_cargo","0")
 
         #ui serction
         newConf.add_section("ui")
         newConf.set("ui","text_color","Red")
-        newConf.set("ui","text_other_color","Blue")
+        newConf.set("ui","text_other_color","#00ffff")
         newConf.set("ui","sound","1")
         newConf.set("ui","font_size","18")
         newConf.set("ui","pos_x","10")
