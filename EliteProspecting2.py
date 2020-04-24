@@ -145,7 +145,7 @@ class application():
         self.settings.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
 
         row += 1
-        self.onlineB = tk.Button(self.w, text="Go Snline", command=self.connect,background=backgroundColor,foreground=textColor)
+        self.onlineB = tk.Button(self.w, text="Go online", command=self.connect,background=backgroundColor,foreground=textColor)
         self.onlineLabel = tk.Label(self.w,text="Offline",background=backgroundColor)
         self.onlineB.grid(row=row, padx=PADX, pady=PADY, sticky=tk.W)
         self.onlineLabel.grid(row=row, column=1, padx=PADX, pady=PADY, sticky=tk.EW)
