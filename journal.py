@@ -46,9 +46,9 @@ class journal():
 
     def getLatestJournal(self):
         #listing files
-        list_of_files = glob.glob(self.defaultPath)
+        fileList = glob.glob(self.defaultPath)
         #get the lastet one
-        logfile = max(list_of_files, key=os.path.getctime)
+        logfile = max(fileList, key=os.path.getctime)
         if not os.path.exists(logfile):
             raise ValueError("No log file found")
         try:
