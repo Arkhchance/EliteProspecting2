@@ -169,10 +169,8 @@ class application():
     def onCheck(self,event=None):
         for (checkBox,value) in self.checkBoxes:
             if value.get() == 1:
-                print("1")
                 checkBox["foreground"] = self.config.config['ui_colors']['cbValid']
             else:
-                print("0")
                 checkBox["foreground"] = self.config.config['ui_colors']['textColor']
 
     def setupUi(self):
